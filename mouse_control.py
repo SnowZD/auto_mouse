@@ -90,20 +90,20 @@ tree.bind('<Double-1>', treeviewLdoubleclick)
 
 def on_move(curx, cury):
     global rgb
-    #try:
-    if c1.get() == 'Pause(F2)':
-        a1.set('%d,%d' % (curx, cury))
-        rgb = pg.screenshot().getpixel((curx, cury))
-        if rgb[0]+rgb[1]+rgb[2] > 400:
-            AN1.configure(fg='#000000')
-        elif rgb[0]+rgb[1]+rgb[2] < 300:
-            AN1.configure(fg='#ffffff')
-        hexRGB = '#'+f'{rgb[0]:02x}'+f'{rgb[1]:02x}'+f'{rgb[2]:02x}'
-        AN1.configure(bg=hexRGB)
-    time.sleep(0.000001)
-    # except:
-    #     # print('Over the screen.')
-    #     time.sleep(0.000001)
+    try:
+        if c1.get() == 'Pause(F2)':
+            a1.set('%d,%d' % (curx, cury))
+            rgb = pg.screenshot().getpixel((curx, cury))
+            if rgb[0]+rgb[1]+rgb[2] > 400:
+                AN1.configure(fg='#000000')
+            elif rgb[0]+rgb[1]+rgb[2] < 300:
+                AN1.configure(fg='#ffffff')
+            hexRGB = '#'+f'{rgb[0]:02x}'+f'{rgb[1]:02x}'+f'{rgb[2]:02x}'
+            AN1.configure(bg=hexRGB)
+        time.sleep(0.000001)
+    except:
+        # print('Over the screen.')
+        time.sleep(0.000001)
 
 
 def on_press(key):
@@ -129,8 +129,8 @@ def on_press(key):
                                        font=fontStyle2, foreground='#ffffff')
         if key == keyboard.Key.f3:
             Running('<1>')
-        if key==keyboard.Key.esc:
-            comlistbox.delete(0,"end")
+        if key == keyboard.Key.esc:
+            comlistbox.delete(0, "end")
             buttondisable()
             ifbutton.config(state=NORMAL)
     except:
@@ -186,6 +186,7 @@ def COM_start(event):
     while b1.get() == 'Stop(F3)':
         if times == int(E1.get()) and checkvalue.get() == False:
             b1.set('Run(F3)')
+            return
         global checklist, actionlist
         checkaxis = []
         checkcolor = []
@@ -223,6 +224,7 @@ def check(checkaxis, checkcolor, actioncom):
             i = i+1
         if acceptaction == 1:
             mouseaction(actioncom)
+
     except:
         time.sleep(0.0000001)
 
@@ -236,7 +238,8 @@ def mouseaction(move):
             pyautogui.moveTo((tarposi[0], tarposi[1]))
             if move[i+2] == 'click':
                 pyautogui.click(clicks=1, button='left')
-                times = times+1
+                if i+2 == len(move)-1:
+                    times = times+1
         i = i+1
 
 
